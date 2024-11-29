@@ -1,42 +1,103 @@
+
 # HEARTS-Text-Stereotype-Detection
 
-# Overview: 
-HEARTS enhances stereotype detection with explainable, low-carbon models fine-tuned on a diverse dataset, addressing LLMs' poor accuracy and the subjectivity of stereotypes. See https://arxiv.org/abs/2409.11579. 
+[![Paper](https://img.shields.io/badge/ArXiv-2409.11579-red)](https://arxiv.org/abs/2409.11579)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-This repository provides access to the scripts used to train and evaluate the sentence-level stereotype classification models introduced in the HEARTS research. 
+## Overview
 
-# Resources: 
+HEARTS introduces explainable, low-carbon models fine-tuned on the **Expanded Multi-Grain Stereotype Dataset (EMGSD)** to tackle challenges in stereotype detection. This repository includes scripts for training, evaluation, and explainability analysis for sentence-level stereotype classification. For details, refer to the [HEARTS research paper](https://arxiv.org/abs/2409.11579).
 
-First run *requirements.txt*, which provides all necessary prerequisites to complete the four modules below. 
+---
 
-**1. Exploratory Data Analysis**
+## Features
 
-Code to perform basic Exploratory Data Analysis (EDA) on the Expanded Multi-Grain Stereotype Dataset (EMGSD). Dataset is also available at https://huggingface.co/datasets/holistic-ai/EMGSD. 
+- **Exploratory Data Analysis (EDA):** Analyze group distributions, text length, and sentiment/regard trends in EMGSD.
+- **Model Training & Evaluation:** Train and test models (e.g., BERT, ALBERT-V2, logistic regression) on EMGSD with ablation studies.
+- **Explainability:** Generate SHAP and LIME explanations to interpret predictions.
+- **LLM Bias Evaluation:** Classify and evaluate bias in LLM outputs using neutral prompts derived from EMGSD.
 
-- **Initial_EDA** - analyses target group distribution, stereotype group distrubtion, text length and frequency analysis.
-- **Sentiment_Regard_Analysis** - uses pre-trained models to classify Sentiment (https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest) and Regard (https://huggingface.co/sasha/regardv3) of each observation in dataset.
+---
 
-**2. Model Training and Evaluation**
+## Quickstart
 
-Code to train and/or evaluate a series of models on the EMGSD. In each case an ablation study is performed using the three underlying components of EMGSD (MGSD, Augmented WinoQueer Dataset, Augmented SeeGULL Dataset). 
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/username/HEARTS-Text-Stereotype-Detection.git
+   cd HEARTS-Text-Stereotype-Detection
+   ```
 
-- **BERT_Models_Fine_Tuning** - trains and evaluates performance of ALBERT-V2, DistilBERT and BERT models fine-tuned on EMGSD. 
-- **Logistic_Regression** - trains and evaluates performance of logistic regression models on EMGSD using (1) TF-IDF vectorisation and (2) pre-trained embeddings (see https://spacy.io/models/en).
-- **DistilRoBERTaBias** - evaluates performance of open-source model for general bias detection (from https://huggingface.co/valurank/distilroberta-bias).
-- **GPT4_Models** - evaluates performance of GPT-4o and GPT-4o-mini with prompting through API, requires own credentials to execute.
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-**3. Model Explainability**
+3. Explore the modules (see details below).
 
-Code to perform SHAP (SHapley Additive exPlanations) and LIME (Local Interpretable Model-Agnostic Explanations) analysis on predictions of the ALBERT-V2 model fine-tuned on EMGSD. The weights of this model are also available at https://huggingface.co/holistic-ai/bias_classifier_albertv2. 
+---
 
-- **SHAP_LIME_Analysis** - calculates SHAP and LIME vectors for chosen sample of model predictions, then compares vectors using set of similarity metrics (cosine similarity, Pearson correlation, Jensen-Shannon divergence) to provide degree of confidence in the explanations provided by the SHAP and LIME methods.
+## Modules
 
-**4. LLM Bias Evaluation Exercise**
+### 1. Exploratory Data Analysis
+Scripts to perform basic analysis on EMGSD, available at [Hugging Face](https://huggingface.co/datasets/holistic-ai/EMGSD).
 
-Code using fine-tuned ALBERT-V2 model to classify LLM responses, generated through APIs, when given neutral prompts constructed by stemming sentences from the EMGSD. 
+- **`Initial_EDA`**: Analyze target group distribution, stereotype group distribution, text length, and frequency.
+- **`Sentiment_Regard_Analysis`**: Classify sentiment ([RoBERTa Sentiment Model](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest)) and regard ([Regard v3](https://huggingface.co/sasha/regardv3)) for dataset entries.
 
-- **LLM_Prompt_Verification** - uses fine-tuned ALBERT-V2 model to verify that all prompts fed into the LLMs tested are neutral.
-- **LLM_Bias_Evaluation** - uses fine-tuned ALBERT-V2 model to classify LLM outputs to these prompts, to calculate aggregate bias scores for each model, representing stereotype prevalance.
-- **SHAP_LIME_Analysis_LLM_Outputs** - applies same explainability framework as Module 3 to provide SHAP and LIME analysis of predictions made by the fine-tuned ALBERT-V2 models on the LLM outputs. 
+### 2. Model Training and Evaluation
+Train and evaluate various models on EMGSD, with ablation studies on its three core datasets (MGSD, Augmented WinoQueer, and Augmented SeeGULL).
 
+- **`BERT_Models_Fine_Tuning`**: Fine-tune and evaluate ALBERT-V2, DistilBERT, and BERT models.
+- **`Logistic_Regression`**: Train logistic regression models using:
+  - TF-IDF vectorization
+  - Pre-trained embeddings ([spaCy embeddings](https://spacy.io/models/en))
+- **`DistilRoBERTaBias`**: Evaluate an open-source bias detection model ([DistilRoBERTa Bias](https://huggingface.co/valurank/distilroberta-bias)).
+- **`GPT4_Models`**: Evaluate GPT-4o and GPT-4o-mini using API prompting (API credentials required).
 
+### 3. Model Explainability
+Interpret model predictions using SHAP and LIME. Weights for the fine-tuned ALBERT-V2 model are available at [Hugging Face](https://huggingface.co/holistic-ai/bias_classifier_albertv2).
+
+- **`SHAP_LIME_Analysis`**: Generate SHAP and LIME explanations for selected model predictions and compare their similarity using metrics such as:
+  - Cosine similarity
+  - Pearson correlation
+  - Jensen-Shannon divergence
+
+### 4. LLM Bias Evaluation
+Classify and evaluate bias in LLM responses using neutral prompts derived from EMGSD.
+
+- **`LLM_Prompt_Verification`**: Verify neutrality of prompts using the fine-tuned ALBERT-V2 model.
+- **`LLM_Bias_Evaluation`**: Classify LLM outputs to compute aggregate bias scores, representing stereotype prevalence.
+- **`SHAP_LIME_Analysis_LLM_Outputs`**: Apply SHAP and LIME to interpret predictions on LLM outputs.
+
+---
+
+## Results
+
+Key findings and performance benchmarks from the paper are outlined [here](https://arxiv.org/abs/2409.11579).
+
+---
+
+## Citation
+
+If you use this work, please cite the following paper:
+
+```
+@article{hearts2024,
+  title={HEARTS: Enhancing Stereotype Detection with Explainable, Low-Carbon Models},
+  author={Author Names},
+  journal={arXiv preprint arXiv:2409.11579},
+  year={2024}
+}
+```
+
+---
+
+## License
+
+This repository is licensed under the [MIT License](LICENSE).
+
+---
+
+## Contact
+
+For questions or collaborations, contact [Holistic AI](https://www.holisticai.com).
